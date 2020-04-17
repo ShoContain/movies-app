@@ -17,8 +17,20 @@ class MoviesController extends Controller
         $popularMovies = Http::withToken(config('services.tmdb.token'))
             ->get('https://api.themoviedb.org/3/movie/popular?language=ja-JA')
             ->json()['results'];
-        dump($popularMovies);
-        return view('movies.index',compact('popularMovies'));
+
+        $nowPlayingMovies = Http::withToken(config('services.tmdb.token'))
+            ->get('https://api.themoviedb.org/3/movie/now_playing?language=ja-JA')
+            ->json()['results'];
+        dump($nowPlayingMovies);
+
+        $genresArray = Http::withToken(config('services.tmdb.token'))
+            ->get('https://api.themoviedb.org/3/genre/movie/list?language=ja-JA')
+            ->json()['genres'];
+
+        $genres = collect($genresArray)->mapWithKeys(function($genres){
+            return [$genres['id']=>$genres['name']];
+        });
+        return view('movies.index',compact('popularMovies','genres','nowPlayingMovies'));
     }
 
     /**
