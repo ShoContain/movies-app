@@ -14,7 +14,7 @@
        </div> {{--end of pupular-movies--}}
 
         <div class="now-playing-movies pt-20">
-           <h2 class="text-orange-400 tracking-wider font-semibold">現在上映中の映画</h2>
+           <h2 class="text-orange-400 tracking-wider font-semibold">上映中の映画</h2>
            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-16">
                @foreach($nowPlayingMovies as $movie)
                    <x-movie-card :movie="$movie" :genres="$genres"/>

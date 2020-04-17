@@ -21,7 +21,6 @@ class MoviesController extends Controller
         $nowPlayingMovies = Http::withToken(config('services.tmdb.token'))
             ->get('https://api.themoviedb.org/3/movie/now_playing?language=ja-JA')
             ->json()['results'];
-        dump($nowPlayingMovies);
 
         $genresArray = Http::withToken(config('services.tmdb.token'))
             ->get('https://api.themoviedb.org/3/genre/movie/list?language=ja-JA')
@@ -62,7 +61,21 @@ class MoviesController extends Controller
      */
     public function show($id)
     {
-        //
+//        一覧からの詳細画面（写真、説明、俳優陣など,etc）
+        $movie = Http::withToken(config('services.tmdb.token'))
+            ->get("https://api.themoviedb.org/3/movie/{$id}?language=ja-JA&append_to_response=credits,videos,images")
+            ->json();
+//       日本語に設定すると動画が取れなかったので再度動画のみ取得
+        $video = Http::withToken(config('services.tmdb.token'))
+            ->get("https://api.themoviedb.org/3/movie/{$id}/videos")
+            ->json();
+
+//        日本語に設定すると動画が取れなかったので再度movieImageのみ取得
+         $images = Http::withToken(config('services.tmdb.token'))
+             ->get("https://api.themoviedb.org/3/movie/{$id}/images")
+             ->json();
+
+        return view('movies.show',compact('movie','video','images'));
     }
 
     /**
