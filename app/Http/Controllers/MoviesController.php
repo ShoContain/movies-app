@@ -29,6 +29,7 @@ class MoviesController extends Controller
         $genres = collect($genresArray)->mapWithKeys(function($genres){
             return [$genres['id']=>$genres['name']];
         });
+
         return view('movies.index',compact('popularMovies','genres','nowPlayingMovies'));
     }
 
@@ -65,6 +66,7 @@ class MoviesController extends Controller
         $movie = Http::withToken(config('services.tmdb.token'))
             ->get("https://api.themoviedb.org/3/movie/{$id}?language=ja-JA&append_to_response=credits,videos,images")
             ->json();
+
 //       日本語に設定すると動画が取れなかったので再度動画のみ取得
         $video = Http::withToken(config('services.tmdb.token'))
             ->get("https://api.themoviedb.org/3/movie/{$id}/videos")
