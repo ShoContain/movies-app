@@ -3,8 +3,13 @@
 @section('content')
     <div class="movie-detail border-b border-gray-800">
         <div class="container mx-auto px-4 py-8 flex items-center md:flex-row flex-col">
-            <img src="{{ 'https://image.tmdb.org/t/p/w500'.$movie['poster_path'] }}" alt="{{ $movie['title'] }}" class="w-96">
-
+            @if(isset($movie['poster_path']))
+                <img src="{{ 'https://image.tmdb.org/t/p/w500'.$movie['poster_path'] }}" alt="{{ $movie['title'] }}" class="w-96">
+            @else
+                <div class="px-24 py-32 border border-gray-800 text-center">
+                    <span>No Image</span>
+                </div>
+            @endif
             <div class="pl-8 md:pl-20">
               <h2 class="text-4xl font-semibold">{{ $movie['title'] }}</h2>
                 <div class="flex items-center text-gray-400 text-sm">
@@ -43,7 +48,7 @@
 
                 @if( count($video['results']) > 0)
                    <div class="mt-10"> {{--視聴セクション--}}
-                       <a href="https://youtube.com/watch?v={{ $video['results'][0]['key'] }}" class="flex inline-flex items-center bg-orange-600 text-gray-400 rounded font-semibold px-8 py-6 hover:bg-orange-500 tracking-wide">
+                       <a href="https://youtube.com/watch?v={{ $video['results'][0]['key'] }}" class="flex inline-flex items-center bg-orange-600 text-gray-400 rounded font-semibold px-12 py-6 hover:bg-orange-500 tracking-wide">
                            <svg class="w-8 mr-2"  viewBox="0 0 499.999 499.999"  xmlns="http://www.w3.org/2000/svg"><path d="M171.875 372.237c-2.701 0-5.402-.702-7.812-2.09a15.622 15.622 0 01-7.812-13.535V140.625a15.614 15.614 0 017.797-13.519c4.837-2.792 10.788-2.838 15.625-.015l187.5 107.94c4.837 2.777 7.828 7.95 7.828 13.535s-2.975 10.742-7.828 13.535l-187.5 108.047a15.656 15.656 0 01-7.798 2.089zM187.5 167.648v161.926l140.564-81.009L187.5 167.648z"/><path d="M250 499.999c-137.848 0-250-112.152-250-250S112.152 0 250 0s250 112.152 250 250-112.153 249.999-250 249.999zm0-468.749C129.38 31.25 31.25 129.379 31.25 250S129.379 468.75 250 468.75 468.749 370.62 468.749 250 370.62 31.25 250 31.25z"/></svg>
                            <span>TRIAL</span>
                        </a>
