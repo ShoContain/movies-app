@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
+use Livewire\Livewire;
 use Tests\TestCase;
 
 class ViewMovieTest extends TestCase
@@ -29,6 +30,43 @@ class ViewMovieTest extends TestCase
 
         $response->assertSee('サイエンスフィクション');
         $response->assertDontSee('コメディ');
+
+    }
+
+    public function the_search_drop_down_works_correctly(){
+        Http::fake([
+            'https://api.themoviedb.org/3/search/movie?query=doraemon'=>$this->fakeSearchMovie(),
+        ],200);
+        Livewire::test('search-dropdown')
+            ->assertDontSee('doraemon')
+            ->set('search','doraemon') //searchプロパティーに'doraemon'をセット
+            ->assertSee('doraemon');
+    }
+
+    private function fakeSearchMovie(){
+        return Http::response([
+            'results' => [
+                [
+                    "popularity" => 492.069,
+                    "vote_count" => 3023,
+                    "video" => false,
+                    "poster_path" => "/xJUILftRf6TJxloOgrilOTJfeOn.jpg",
+                    "id" => 419704,
+                    "adult" => false,
+                    "backdrop_path" => "/5BwqwxMEjeFtdknRV792Svo0K1v.jpg",
+                    "original_language" => "en",
+                    "original_title" => "Fake Movie",
+                    "genre_ids" => [
+                        18,
+                        878,
+                    ],
+                    "title" => "doraemon",
+                    "vote_average" => 6,
+                    "overview" => "地球から43億キロ離れた太陽系の彼方で行方不明になった父を巡る謎を解き、人類の危機を救うため、エリート宇宙飛行士が旅立つ",
+                    "release_date" => "2019-09-17",
+                ]
+            ]
+        ], 200);
 
     }
 

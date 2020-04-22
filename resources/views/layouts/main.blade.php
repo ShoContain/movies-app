@@ -5,8 +5,8 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>Document</title>
-    <livewire:styles>
     <link rel="stylesheet" href="/css/main.css">
+    <livewire:styles>
 </head>
 
 <body class="font-sans bg-gray-900 text-white">
