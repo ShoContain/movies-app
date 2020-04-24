@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\ViewModels\MoviesViewModel;
+use App\ViewModels\ShowMovieModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -22,15 +24,23 @@ class MoviesController extends Controller
             ->get('https://api.themoviedb.org/3/movie/now_playing?language=ja-JA')
             ->json()['results'];
 
-        $genresArray = Http::withToken(config('services.tmdb.token'))
+        $genres = Http::withToken(config('services.tmdb.token'))
             ->get('https://api.themoviedb.org/3/genre/movie/list?language=ja-JA')
             ->json()['genres'];
 
-        $genres = collect($genresArray)->mapWithKeys(function($genres){
-            return [$genres['id']=>$genres['name']];
-        });
+//        $genres = collect($genresArray)->mapWithKeys(function($genres){
+//            return [$genres['id']=>$genres['name']];
+//        });
 
-        return view('movies.index',compact('popularMovies','genres','nowPlayingMovies'));
+//        return view('movies.index',
+//            compact('popularMovies','genres','nowPlayingMovies'));
+
+        $viewModel = new MoviesViewModel(
+            $popularMovies,
+            $genres,
+            $nowPlayingMovies,
+        );
+        return view('movies.index',$viewModel);
     }
 
     /**
@@ -72,12 +82,13 @@ class MoviesController extends Controller
             ->get("https://api.themoviedb.org/3/movie/{$id}/videos")
             ->json();
 
-//        日本語に設定すると動画が取れなかったので再度movieImageのみ取得
+//        日本語に設定するとイメージが取れなかったので再度movieImageのみ取得
          $images = Http::withToken(config('services.tmdb.token'))
              ->get("https://api.themoviedb.org/3/movie/{$id}/images")
              ->json();
 
-        return view('movies.show',compact('movie','video','images'));
+         $viewModel = new ShowMovieModel($movie,$video,$images);
+        return view('movies.show',$viewModel);
     }
 
     /**
