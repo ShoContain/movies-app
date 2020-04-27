@@ -4,7 +4,7 @@
 <div class="actor-detail border-b border-gray-800">
     <div class="container mx-auto px-4 py-16 flex items-center flex-col md:flex-row ">
 
-        <div class="flex-none md:pb-56"> {{--プロフィール写真＋ソーシャルミディア--}}
+        <div class="flex-none md:pb-64 lg:pb-40"> {{--プロフィール写真＋ソーシャルミディア--}}
             <img src={{ $detailActor['profile_path'] }} alt="actor" class="w-76">
             <ul class="flex items-center mt-6">
                 @if($social['instagram'])
