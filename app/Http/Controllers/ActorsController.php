@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\ViewModels\ActorDetailModel;
+use App\ViewModels\ActorsViewModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class ActorsController extends Controller
 {
@@ -11,9 +14,16 @@ class ActorsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($page = 1)
     {
-        //
+        abort_if($page>500,204,'これ以上検索結果はありません');
+
+        $popularActors = Http::withToken(config('services.tmdb.token'))
+            ->get('https://api.themoviedb.org/3/person/popular?language=ja-JA&page='.$page)
+            ->json()['results'];
+        $viewModel = new ActorsViewModel($popularActors,$page);
+
+        return view('actors.index',$viewModel);
     }
 
     /**
@@ -45,7 +55,20 @@ class ActorsController extends Controller
      */
     public function show($id)
     {
-        //
+        $detailActor = Http::withToken(config('services.tmdb.token'))
+            ->get('https://api.themoviedb.org/3/person/'.$id)
+            ->json();
+
+        $social = Http::withToken(config('services.tmdb.token'))
+            ->get("https://api.themoviedb.org/3/person/{$id}/external_ids")
+            ->json();
+
+        $credits = Http::withToken(config('services.tmdb.token'))
+            ->get("https://api.themoviedb.org/3/person/{$id}/combined_credits")
+            ->json();
+
+        $viewModel = new ActorDetailModel($detailActor,$social,$credits);
+        return view('actors.show',$viewModel);
     }
 
     /**

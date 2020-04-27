@@ -45,7 +45,9 @@ class MoviesViewModel extends ViewModel
             })->implode(' , ');
 
             return collect($movie)->merge([
-                'poster_path'=>'https://image.tmdb.org/t/p/w500'.$movie['poster_path'],
+                'poster_path'=>$movie['poster_path']
+                    ? 'https://image.tmdb.org/t/p/w500'.$movie['poster_path']
+                    :null,
                 'release_date'=> Carbon::parse( $movie['release_date'])->format('Y年m月d日'),
                 'genres'=>$genresFormatted,
             ])->only([

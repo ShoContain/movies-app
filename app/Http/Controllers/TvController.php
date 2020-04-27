@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\ViewModels\ShowMovieModel;
+use App\ViewModels\TvShowViewModel;
+use App\ViewModels\TvViewModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class TvController extends Controller
 {
@@ -13,7 +17,24 @@ class TvController extends Controller
      */
     public function index()
     {
-        //
+        $popularTv = Http::withToken(config('services.tmdb.token'))
+            ->get('https://api.themoviedb.org/3/tv/popular?language=ja-JA')
+            ->json()['results'];
+
+        $topRatedTv = Http::withToken(config('services.tmdb.token'))
+            ->get('https://api.themoviedb.org/3/tv/top_rated?language=ja-JA')
+            ->json()['results'];
+
+        $genres = Http::withToken(config('services.tmdb.token'))
+            ->get('https://api.themoviedb.org/3/genre/movie/list?language=ja-JA')
+            ->json()['genres'];
+
+        $viewModel = new TvViewModel(
+            $popularTv,
+            $genres,
+            $topRatedTv
+        );
+        return view('tv.index',$viewModel);
     }
 
     /**
@@ -45,7 +66,21 @@ class TvController extends Controller
      */
     public function show($id)
     {
-        //
+//         一覧からの詳細画面（写真、説明、俳優陣など,etc）
+        $tvshow = Http::withToken(config('services.tmdb.token'))
+            ->get("https://api.themoviedb.org/3/tv/{$id}?language=ja-JA")
+            ->json();
+
+//       日本語に設定すると動画が取れなかったので再度動画のみ取得
+        $details = Http::withToken(config('services.tmdb.token'))
+            ->get("https://api.themoviedb.org/3/tv/{$id}?append_to_response=credits,videos,images")
+            ->json();
+
+
+
+        $viewModel = new TvShowViewModel($tvshow,$details);
+        return view('tv.show',$viewModel);
+
     }
 
     /**

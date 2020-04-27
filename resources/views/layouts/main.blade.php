@@ -23,10 +23,10 @@
                    <a href="{{ route('movies.index')}}" class="hover:text-gray-300">映画</a>
                </li>
                <li class="md:ml-8 mt-3 md:ml-4 md:mt-0">
-                   <a href="" class="hover:text-gray-300">TV番組</a>
+                   <a href="{{ route('tv.index') }}" class="hover:text-gray-300">TV番組</a>
                </li>
                <li class="md:ml-8 mt-3 md:ml-4 md:mt-0">
-                   <a href="" class="hover:text-gray-300">出演者</a>
+                   <a href="{{ route('actors.index') }}" class="hover:text-gray-300">出演者</a>
                </li>
            </ul>
 
@@ -41,5 +41,6 @@
     </nav>
     @yield('content')
     <livewire:scripts>
+    @yield('scripts')
 </body>
 </html>

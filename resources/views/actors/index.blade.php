@@ -2,24 +2,59 @@
 
 
 @section('content')
-<div class="container mx-auto px-4 pt-16">
-    <div class="popular-movies border-b  pb-10 border-gray-400">
-        <h2 class="text-orange-400 tracking-wider font-semibold">人気の映画</h2>
+<div class="container mx-auto px-4 py-16">  {{--start of pupular-actors--}}
+    <div class="popular-actors  pb-10 ">
+        <h2 class="text-orange-400 tracking-wider font-semibold">今注目の俳優</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-16">
-
-            @foreach($popularMovies as $movie)
-            <x-movie-card :movie="$movie" :genres="$genres"/>
+            @foreach($popularActors as $actor)
+                <div class="actor mt-8">
+                    <a href="{{route('actors.show',$actor['id'])}}">
+                        <img src={{ $actor['profile_path'] }}
+                             alt="profile_image"
+                             class="hover:opacity-75 transition ease-in-out duration-150"
+                        >
+                        <div class="mt-2">
+                            <a href="{{route('actors.show',$actor['id'])}}" class="text-lg hover:text-gray-400">{{ $actor['name'] }}</a>
+                                <div class="text-xs text-gray-500 truncate">
+                                   {{$actor['known_for']}}
+                                </div>
+                        </div>
+                    </a>
+                </div>
             @endforeach
         </div>
-    </div> {{--end of pupular-movies--}}
+    </div> {{--end of pupular-actors--}}
 
-    <div class="now-playing-movies pt-20">
-        <h2 class="text-orange-400 tracking-wider font-semibold">上映中の映画</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-16">
-            @foreach($nowPlayingMovies as $movie)
-            <x-movie-card :movie="$movie" :genres="$genres"/>
-            @endforeach
+    <div class="page-load-status my-8">  {{--スクロールのステータスバー--}}
+        <div class="flex justify-center">
+            <p class="infinite-scroll-request spinner text-4xl"></p>
+            <p class="infinite-scroll-last font-bold">ページはここまでです</p>
         </div>
-    </div>   {{--end-of-now-playing-movies--}}
+        <p class="infinite-scroll-error font-bold">読み込みエラーが発生しました</p>
+    </div>
+
+{{--    <div class="flex justify-around mt-12">--}}
+{{--        @if($previous)--}}
+{{--            <a href="/actors/page/{{$previous}}" class="hover:text-gray-400">前</a>--}}
+{{--         @endif--}}
+{{--        @if($next)--}}
+{{--            <a href="/actors/page/{{$next}}" class="hover:text-gray-400">次</a>--}}
+{{--        @endif--}}
+{{--    </div>--}}
 </div>
+@endsection
+
+@section('scripts')
+    <script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
+    <script>
+        var elem = document.querySelector('.grid');
+        var infScroll = new InfiniteScroll( elem, {
+            // options
+            path: '/actors/page/@{{#}}',
+            append: '.actor',
+            status: '.page-load-status',
+            // history: false,
+        });
+
+    </script>
 @endsection

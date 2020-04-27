@@ -22,8 +22,9 @@ class ShowMovieModel extends ViewModel
     public function movie()
     {
         return collect($this->movie)->merge([
-            'poster_path'=>trim($this->movie['poster_path'])===''?'':
-                'https://image.tmdb.org/t/p/w500'.$this->movie['poster_path'],
+            'poster_path'=>$this->movie['poster_path']
+                ?'https://image.tmdb.org/t/p/w500'.$this->movie['poster_path']
+                :'',
             'release_date'=> Carbon::parse( $this->movie['release_date'])->format('Y年m月d日'),
             'genres'=>collect($this->movie['genres'])->pluck('name')->flatten()->implode(' , '),
             'cast'=>collect($this->movie['credits']['cast'])->take(2),

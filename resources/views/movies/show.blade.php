@@ -3,7 +3,7 @@
 @section('content')
     <div class="movie-detail border-b border-gray-800">
         <div class="container mx-auto px-4 py-8 flex items-center md:flex-row flex-col">
-            @if(!empty($movie['poster_path']))
+            @if($movie['poster_path'])
                 <img src="{{ $movie['poster_path'] }}" alt="{{ $movie['title'] }}" class="w-96">
             @else
                 <div class="px-32 py-40 border border-gray-800 text-center">
@@ -86,12 +86,12 @@
                     @if($loop->index<5)
                     @if(!empty($cast['profile_path']))
                         <div class="mt-8">
-                            <a href="#">
+                            <a href="{{route('actors.show',$cast['id'])}}">
                                 <img src="{{ 'https://image.tmdb.org/t/p/w500'.$cast['profile_path'] }}"  alt="{{ $cast['name'] }}"
                                      class="hover:opacity-75 transition ease-in-out duration-150">
                             </a>
                             <div class="mt-2">
-                                <a href="" class="text-lg hover:text-gray-400">{{ $cast['name'] }}</a>
+                                <a href="{{route('actors.show',$cast['id'])}}" class="text-lg hover:text-gray-400">{{ $cast['name'] }}</a>
                             </div>
                         </div>
                      @else
