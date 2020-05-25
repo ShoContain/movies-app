@@ -48,6 +48,6 @@ class TvViewModel extends ViewModel
             ])->only([
                 'poster_path','first_air_date','genres','vote_average','name','id'
             ]);
-        })->dump();
+        });
 }
 }
